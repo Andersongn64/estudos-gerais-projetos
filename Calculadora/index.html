@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #232526, #414345);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+    }
+    .calculator {
+      background: #2d2d2d;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+      padding: 30px 20px;
+      width: 330px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .display {
+      background: #222;
+      color: #fff;
+      font-size: 2rem;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: right;
+      min-height: 44px;
+      letter-spacing: 1px;
+      overflow-x: auto;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    button {
+      background: #393e46;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      padding: 16px 0;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    button:active {
+      background: #222831;
+      transform: scale(0.97);
+    }
+    .operator {
+      background: #00adb5;
+      color: #fff;
+    }
+    .equals {
+      background: #f96d00;
+      color: #fff;
+      grid-column: span 2;
+    }
+    .clear {
+      background: #393e46;
+      color: #f96d00;
+    }
+    @media (max-width: 400px) {
+      .calculator {
+        width: 98vw;
+        padding: 12px 2px;
+      }
+      .display {
+        font-size: 1.1rem;
+        padding: 8px;
+      }
+      button {
+        font-size: 0.95rem;
+        padding: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="backspace()">⌫</button>
+      <button onclick="appendOperator('%')" class="operator">%</button>
+      <button onclick="appendOperator('/')" class="operator">÷</button>
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button onclick="appendOperator('*')" class="operator">×</button>
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button onclick="appendOperator('-')" class="operator">−</button>
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button onclick="appendOperator('+')" class="operator">+</button>
+      <button onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
+      <button onclick="appendDot()">.</button>
+      <button onclick="calculate()" class="equals">=</button>
+    </div>
+  </div>
+  <script>
+    // Variáveis principais
+    let display = document.getElementById('display');
+    let current = '';
+    let resetNext = false;
+
+    // Atualiza o visor
+    function updateDisplay() {
+      display.textContent = current || '0';
+    }
+
+    // Adiciona número
+    function appendNumber(num) {
+      if (resetNext) {
+        current = '';
+        resetNext = false;
+      }
+      if (current.length > 18) return;
+      if (num === '0' && current === '0') return;
+      if (current === '0') current = '';
+      current += num;
+      updateDisplay();
+    }
+
+    // Adiciona operador
+    function appendOperator(op) {
+      if (current === '') return;
+      if (/[+\-*/%]$/.test(current)) {
+        current = current.slice(0, -1) + op;
+      } else {
+        current += op;
+      }
+      resetNext = false;
+      updateDisplay();
+    }
+
+    // Adiciona ponto decimal
+    function appendDot() {
+      let parts = current.split(/[+\-*/%]/);
+      let last = parts[parts.length - 1];
+      if (!last.includes('.')) {
+        current += current === '' ? '0.' : '.';
+        updateDisplay();
+      }
+    }
+
+    // Limpa visor
+    function clearDisplay() {
+      current = '';
+      updateDisplay();
+    }
+
+    // Apaga último caractere
+    function backspace() {
+      current = current.slice(0, -1);
+      updateDisplay();
+    }
+
+    // Calcula resultado
+    function calculate() {
+      try {
+        let expression = current.replace(/÷/g, '/').replace(/×/g, '*');
+        let result = eval(expression);
+        if (result === undefined || isNaN(result)) return;
+        current = result.toString();
+        resetNext = true;
+        updateDisplay();
+      } catch {
+        current = 'Erro';
+        resetNext = true;
+        updateDisplay();
+      }
+    }
+  </script>
+</body>
+</html>

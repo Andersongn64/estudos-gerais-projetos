@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Usuários</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Gerenciamento de Usuários</h1>
+        </header>
+        <section class="form-container" aria-label="Formulário de Usuário">
+            <h2>Adicionar ou Editar Usuário</h2>
+            <form id="userForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="name">Nome:</label>
+                    <input type="text" id="name" name="name" minlength="2" maxlength="60" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" maxlength="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Idade:</label>
+                    <input type="number" id="age" name="age" min="0" max="120" required>
+                </div>
+                <button type="submit" id="submitBtn">Adicionar Usuário</button>
+                <button type="reset" id="resetBtn" style="display:none; margin-top:10px;">Cancelar Edição</button>
+            </form>
+            <div id="formMessage" role="alert" aria-live="polite"></div>
+        </section>
+        <section class="users-container" aria-label="Lista de Usuários">
+            <h2>Lista de Usuários</h2>
+            <div id="usersList"></div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
